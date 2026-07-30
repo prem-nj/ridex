@@ -1,15 +1,19 @@
 import React, { useState } from 'react'
 
 import { motion } from "motion/react"
-import { X } from 'lucide-react'
+import { Mail, X,Lock, User } from 'lucide-react'
 import Image from "next/image"
 type propType = {
   open: boolean,
   onClose: () => void
 }
-
+type stepType="login"|"signup"|"otp"
 const AuthModel = ({ open, onClose }: propType) => {
-  const [step, setstep] = useState()
+  const [step, setStep] = useState<stepType>("login")
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [loading, setLoading] = useState(false)
   return (
     <>
       {open &&
@@ -57,6 +61,63 @@ const AuthModel = ({ open, onClose }: propType) => {
                                     <div className='text-xs text-gray-500'>OR</div>
                                     <div className='flex-1 h-px bg-black/10' />
                                 </div>
+
+      {step == "login" && (
+                                        <motion.div
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+
+                                        >
+                                            <h1 className='text-xl font-semibold text-black text-center' >Welcome back</h1>
+                                            <div className='mt-5 space-y-4'>
+                                                <div className='flex items-center gap-3 border border-black/20 rounded-xl px-4 py-3'>
+                                                    <Mail size={18} className='text-gray-500' />
+                                                    <input type="email" placeholder='Email' className='w-full bg-transparent outline-none text-sm text-black' onChange={(e) => setEmail(e.target.value)} value={email} />
+                                                </div>
+                                                <div className='flex items-center gap-3 border border-black/20 rounded-xl px-4 py-3'>
+                                                    <Lock size={18} className='text-gray-500' />
+                                                    <input type="password" placeholder='Password' className='w-full bg-transparent outline-none text-sm text-black' onChange={(e) => setPassword(e.target.value)} value={password} />
+                                                </div>
+
+                                                {/* <button className='w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition flex justify-center items-center' onClick={handleLogin}>{!loading ? "Login" : <CircleDashed size={18} color='white' className='animate-spin' />}</button> */}
+
+                                            </div>
+                                            <p className='mt-6 text-center text-sm text-gray-500'> Don’t have an account? <div onClick={() => setStep("signup")} className='text-black font-medium hover:underline'>Sign Up</div></p>
+
+                                        </motion.div>
+                                    )}
+
+   {step == "signup" && (
+                                        <motion.div
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+
+                                        >
+                                            <h1 className='text-xl font-semibold text-center text-black ' >Create Account</h1>
+                                            <div className='mt-5 space-y-4'>
+                                                <div className='flex items-center gap-3 border border-black/20 rounded-xl px-4 py-3'>
+                                                    <User size={18} className='text-gray-500' />
+                                                    <input type="text" placeholder='Full Name' className='w-full bg-transparent outline-none text-sm' onChange={(e) => setName(e.target.value)} value={name} />
+                                                </div>
+                                                <div className='flex items-center gap-3 border border-black/20 rounded-xl px-4 py-3'>
+                                                    <Mail size={18} className='text-gray-500' />
+                                                    <input type="email" placeholder='Email' className='w-full bg-transparent outline-none text-sm' onChange={(e) => setEmail(e.target.value)} value={email} />
+                                                </div>
+                                                <div className='flex items-center gap-3 border border-black/20 rounded-xl px-4 py-3'>
+                                                    <Lock size={18} className='text-gray-500' />
+                                                    <input type="password" placeholder='Password' className='w-full bg-transparent outline-none text-sm' onChange={(e) => setPassword(e.target.value)} value={password} />
+                                                </div>
+
+                                                {/* {err && <p className='text-red-500 '>*{err}</p>} */}
+
+                                                {/* <button className='w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 transition flex justify-center items-center' disabled={loading} onClick={handleSignUp}>{!loading ? "Send Otp" : <CircleDashed size={18} color='white' className='animate-spin' />}</button> */}
+
+                                            </div>
+                                            <p className='mt-6 text-center text-sm text-gray-500'> Already have an account? <div onClick={() => setStep("login")} className='text-black font-medium hover:underline'>Login</div></p>
+
+                                        </motion.div>
+                                    )}
+
                     </div>
 
           </motion.div>
