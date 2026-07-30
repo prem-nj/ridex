@@ -5,7 +5,7 @@ import VechileSlider from './VechileSlider'
 import AuthModel from './AuthModel'
 
 const PublicHome = () => {
-    const [authOpen, setauthOpen] = useState(false)
+    const [authOpen, setauthOpen] = useState(true)
   return (
     <>
     
