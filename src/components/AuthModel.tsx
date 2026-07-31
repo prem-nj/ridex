@@ -37,6 +37,27 @@ const AuthModel = ({ open, onClose }: propType) => {
     }
   }
 
+
+  const handleVerifyEmail = async () => {
+
+    setLoading(true)
+    try {
+      const { data } = await axios.post("/api/auth/verify-email", {
+         email, otp:otp.join("")
+      })
+
+      setLoading(false)
+      console.log(data)
+      setErr("")
+      setStep("login")
+
+    } catch (error) {
+      setLoading(false)
+    }
+  }
+
+
+
   const handleSignIn = async () => {
     setLoading(true)
 
@@ -73,6 +94,7 @@ const AuthModel = ({ open, onClose }: propType) => {
       {open &&
         <>
           <motion.div
+            key="backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={onClose}
@@ -84,6 +106,7 @@ const AuthModel = ({ open, onClose }: propType) => {
           </motion.div>
 
           <motion.div
+            key="modal"
             initial={{ opacity: 0, scale: 0.95, y: 40 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
@@ -108,7 +131,7 @@ const AuthModel = ({ open, onClose }: propType) => {
                   text-sm font-semibold text-black
                   hover:bg-black hover:text-white
                   transition' onClick={handleGoogleLogin} >
-                <Image src="/google.png" alt='Google' width={20} height={20} />
+                <Image src="/google.png" alt='Google' width={20} height={20} priority />
                 Continue with Google
               </button>
               <div className='flex items-center gap-4 my-6'>
@@ -204,7 +227,7 @@ const AuthModel = ({ open, onClose }: propType) => {
                                             </div>
                                             
                                                 {err && <p className='text-red-500 '>*{err}</p>}
-                                            <button className='mt-6 w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 flex justify-center items-center transition' >{!loading ? "Verify OTP and Create Account" : <CircleDashed size={18} color='white' className='animate-spin' />}</button>
+                                             <button className='mt-6 w-full h-11 rounded-xl bg-black text-white font-semibold hover:bg-gray-900 flex justify-center items-center transition' onClick={handleVerifyEmail}>{!loading ? "Verify OTP and Create Account" : <CircleDashed size={18} color='white' className='animate-spin' />}</button>
 
                                         </motion.div>
 

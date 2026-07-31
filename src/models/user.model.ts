@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema<Iuser>({
         type: String
     },
     otpExpiresAt: {
-        type: String
+        type: Date
     },
     isEmailVerified: {
         type: Boolean,
