@@ -11,7 +11,7 @@ type propType = {
 }
 type stepType = "login" | "signup" | "otp"
 const AuthModel = ({ open, onClose }: propType) => {
-  const [step, setStep] = useState<stepType>("otp")
+  const [step, setStep] = useState<stepType>("login")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -31,6 +31,7 @@ const AuthModel = ({ open, onClose }: propType) => {
 
       setLoading(false)
       setErr("")
+      setStep("otp")
     } catch (error) {
       setLoading(false)
     }
