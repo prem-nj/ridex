@@ -1,14 +1,17 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 
 import { motion } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import AuthModel from './AuthModel'
 const navitems = ["Home", "Booking", "About us", "Contact"]
 function Navbar() {
   const pathName = usePathname();
+  
+  const [authOpen, setauthOpen] = useState(false)
   return (
     <>
 
@@ -47,13 +50,13 @@ function Navbar() {
             })}
           </div>
                 <button className='px-4 py-1.5 rounded-full bg-white text-black text-sm'
-
+onClick={()=>{setauthOpen(true)}}
             >
-              Login
+                            Login
             </button>
         </div>
-
       </motion.div>
+<AuthModel open={authOpen} onClose={()=>{setauthOpen(false)}} />
 
     </>
   )

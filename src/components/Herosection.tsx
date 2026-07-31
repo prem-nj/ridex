@@ -4,9 +4,12 @@ import React from 'react'
 import { motion, scale } from "motion/react"
 import { Bike, Bus, Car, Truck } from 'lucide-react';
 
+type onAuthType={
+  onAuthRequired:()=>void
+}
 
 
-const Herosection = () => {
+const Herosection = ({onAuthRequired}:onAuthType) => {
   
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
@@ -57,7 +60,7 @@ const Herosection = () => {
             bg-white text-black
             rounded-full font-semibold
             shadow-xl'
-
+onClick={onAuthRequired}
         >Book Now</motion.button>
       </div>
     </div>

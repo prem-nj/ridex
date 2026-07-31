@@ -9,7 +9,7 @@ const PublicHome = () => {
   return (
     <>
     
-    <Herosection/>
+    <Herosection onAuthRequired={()=>{setauthOpen(true)}}/>
     <VechileSlider/>
     <AuthModel open={authOpen} onClose={()=>setauthOpen(false)} />
     </>
