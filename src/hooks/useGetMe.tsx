@@ -12,12 +12,16 @@ function useGetMe(enabled:boolean) {
       if(!enabled){
         return
       }
-const getMe=async ()=>{
-  const {data}=await axios.get("/api/user/me")
-  dispatch(setUserData(data))
-  console.log(data)
-}
-getMe()
+ const getMe=async ()=>{
+  try {
+    const {data}=await axios.get("/api/user/me")
+    dispatch(setUserData(data))
+  } catch (error) {
+    // User is not authenticated or session expired
+    dispatch(setUserData(null))
+  }
+ }
+ getMe()
 
     }, [enabled])
 

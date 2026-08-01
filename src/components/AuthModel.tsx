@@ -195,7 +195,7 @@ const AuthModel = ({ open, onClose }: propType) => {
 
                 </motion.div>
               )}
-
+  
 
               {step == "otp" && (
 
