@@ -8,7 +8,7 @@ export interface Iuser extends Document {
     isEmailVerified?: boolean
     otp?: string,
     otpExpiresAt?: Date
-
+partnerOnBoardingSteps:number
     updatedAt: Date,
 }
 
@@ -39,7 +39,14 @@ const userSchema = new mongoose.Schema<Iuser>({
     isEmailVerified: {
         type: Boolean,
         default: false
-    }
+    },
+    
+    partnerOnBoardingSteps:{
+    type:Number,
+    min:0,
+    max:8,
+    default:0
+},
 
 
 }, { timestamps: true })

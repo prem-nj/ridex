@@ -61,6 +61,15 @@ export async function POST(req: NextRequest) {
             vehicleModel
         })
 
+
+     if (user.partnerOnBoardingSteps < 1) {
+            user.partnerOnBoardingSteps = 1
+        }
+        user.role = "partner"
+        user.partnerStatus="pending"
+        await user.save()
+
+
         return Response.json(vehicle, { status: 201 })
 
 
