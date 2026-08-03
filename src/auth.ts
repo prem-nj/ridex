@@ -36,6 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                throw Error("user not exist")
             }
 
+        
             const isMatched = await bcrypt.compare(password, user.password)
 
             if (!isMatched) {
@@ -60,30 +61,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
    callbacks: {
 
-       async signIn({ user, account }) {
-          if (account?.provider == "google") {
-             await connectDb();
-             let dbuser = await User.findOne({ email: user.email });
-             if (!dbuser) {
-                dbuser = await User.create({
-                   name: user.name,
-                   email: user.email,
-                })
-             }
-             user.id = dbuser._id
-             user.role = dbuser.role
-          }
-          return true;
-       },
+      async signIn({ user, account }) {
+         if (account?.provider == "google") {
+            await connectDb();
+            let dbuser = await User.findOne({ email: user.email });
+            if (!dbuser) {
+               dbuser = await User.create({
+                  name: user.name,
+                  email: user.email,
+               })
+            }
+            user.id = dbuser._id
+            user.role = dbuser.role
+         }
+         return true;
+      },
 
-   async jwt({ token, user }) {
-      if(user){
-         token.name = user.name,
-            token.email = user.email,
-            token.id = user.id,
-            token.role = user.role
+      async jwt({ token, user }) {
+         if (user) {
+            token.name = user.name,
+               token.email = user.email,
+               token.id = user.id,
+               token.role = user.role
 
-      }
+         }
          return token
       },
       async session({ token, session }) {

@@ -24,10 +24,13 @@ function page() {
         setError("")
         try {
        setLoading(true)
-       const {data}=await axios.post("/partner/onbording/vechile",
+        const {data}=await axios.post("/api/partner/onboarding/vehicle",
         {type:vehicleType,number:vehicleNumber,vehicleModel}
        )
+
        setLoading(false)
+                   router.push("/partner/onboarding/documents")
+
         } catch (error: any) {
             setError(error?.response?.data?.message ?? "something went wrong")
             setLoading(false)

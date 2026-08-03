@@ -36,7 +36,7 @@ const canSubmit=isNameValid && isAccountValid && isIfscValid && isMobileValid
             })
             console.log(data)
             setLoading(false)
-           window.location.href="/"
+           
         } catch (error:any) {
             setError(error?.response?.data?.message || "something went wrong")
             console.log(error)

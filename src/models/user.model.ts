@@ -9,8 +9,8 @@ export interface Iuser extends Document {
     isEmailVerified?: boolean
     otp?: string,
     otpExpiresAt?: Date
-partnerOnBoardingSteps:number
-mobilenumber?:String,
+    partnerOnBoardingSteps: number
+    mobilenumber?: String,
     updatedAt: Date,
 }
 
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema<Iuser>({
     },
     password: {
         type: String,
-        required: true
+        
     },
     role: {
         type: String,
@@ -42,17 +42,17 @@ const userSchema = new mongoose.Schema<Iuser>({
         type: Boolean,
         default: false
     },
-    mobilenumber:{
-        type:String
-        
+    mobilenumber: {
+        type: String
+
     },
-    
-    partnerOnBoardingSteps:{
-    type:Number,
-    min:0,
-    max:8,
-    default:0
-},
+
+    partnerOnBoardingSteps: {
+        type: Number,
+        min: 0,
+        max: 8,
+        default: 0
+    },
 
 
 }, { timestamps: true })
