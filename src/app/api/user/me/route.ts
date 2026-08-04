@@ -2,33 +2,44 @@ import { auth } from "@/auth";
 import connectDb from "@/lib/db";
 import User from "@/models/user.model";
 
-export async function GET(req:Request){
-    try {
-        
-        await connectDb()
-        const session=await auth()
-        if(!session || !session.user){
-            return Response.json({
-                message:"user is not authenticated"
-            },{status:400})
-        }
-        
-        const user=await User.findOne({email:session.user.email})
-        if(!user){
-             return Response.json({
-                message:"user is not found"
-            },{status:400})
-        }
+export async function GET() {
+  try {
+    await connectDb();
 
- return Response.json({
-                user,
-            },{status:200})
-        
+    const session = await auth();
 
-    }catch (error) {
-         return Response.json({
-                message:`get me error ${error}`
-            },{status:500})
-
+    if (!session?.user?.email) {
+      return Response.json(
+        {
+          success: false,
+          message: "User is not authenticated",
+        },
+        { status: 401 }
+      );
     }
+
+    const user = await User.findOne({ email: session.user.email }).lean();
+
+    if (!user) {
+      return Response.json(
+        {
+          success: false,
+          message: "User not found",
+        },
+        { status: 404 }
+      );
+    }
+
+return Response.json(user, { status: 200 });
+  } catch (error) {
+    console.error(error);
+
+    return Response.json(
+      {
+        success: false,
+        message: "Internal server error",
+      },
+      { status: 500 }
+    );
+  }
 }

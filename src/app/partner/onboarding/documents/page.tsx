@@ -42,14 +42,18 @@ function page() {
     }
   }
 
-  const handleImage=(doc:docsType,file:File | null)=>{
-if(!file){
-  return
-}
-setDocs((prev)=>({...prev,[doc]:file}))
-  }
-
-  const isCompleted=docs.aadhar && docs.license && docs.rc
+  const handleImage = (doc: docsType, file: File | null) => {
+    console.log("handleImage called:", doc, file);
+  
+    if (!file) return;
+  
+    setDocs((prev) => ({
+      ...prev,
+      [doc]: file,
+    }));
+  };
+  const isCompleted = docs.aadhar && docs.license && docs.rc
+  console.log("docs:", docs);
   return (
     <div className='min-h-screen bg-white flex items-center justify-center px-4'>
       <motion.div
