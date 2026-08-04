@@ -6,7 +6,7 @@ const KPI_CONFIG: Record<string, {
   iconBg: string; iconColor: string; cardHover: string;
 }> = {
   totalPartners: {
-    iconBg: "bg-purple-50", 
+    iconBg: "bg-purple-50",
     iconColor: "text-purple-700",
     cardHover: "hover:shadow-purple-100/60",
   },
@@ -16,12 +16,12 @@ const KPI_CONFIG: Record<string, {
      cardHover: "hover:shadow-blue-100/60",
   },
   pending: {
-    iconBg: "bg-amber-50", 
+    iconBg: "bg-amber-50",
     iconColor: "text-amber-800",
     cardHover: "hover:shadow-amber-100/60",
   },
   rejected: {
-    iconBg: "bg-red-50", 
+    iconBg: "bg-red-50",
     iconColor: "text-red-800",
     cardHover: "hover:shadow-red-100/60",
   },
@@ -31,9 +31,9 @@ const KPI_CONFIG: Record<string, {
 function Kpi({label,value,icon,variant}:any) {
 
   const cfg = KPI_CONFIG[variant]
-  
-  return (
-    <motion.div 
+
+return (
+    <motion.div
       whileHover={{ y: -5 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={`bg-white rounded-2xl p-5 border border-gray-100 shadow-sm
@@ -46,7 +46,7 @@ function Kpi({label,value,icon,variant}:any) {
         whileHover={{ rotate: -6, scale: 1.1 }}
             transition={{ type: "spring", stiffness: 400 }}
             className={`w-11 h-11 rounded-xl flex items-center justify-center ${cfg.iconBg} ${cfg.iconColor}`}
-        
+
         >
 {icon}
         </motion.div>
@@ -61,9 +61,9 @@ function Kpi({label,value,icon,variant}:any) {
         >
           {value}
         </motion.div>
-        
-        </div> 
-      
+
+        </div>
+
     </motion.div>
   )
 }
