@@ -48,6 +48,17 @@ function AdminDashboard() {
       }
     }
   }
+  
+  
+    const handleGetPendingKYC = async () => {
+    try {
+      const { data } = await axios.get("/api/admin/video-kyc/pending")
+      setPendingkyc(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
 
   // useEffect(() => {
   //   const fetchDashboardData = async () => {
@@ -81,7 +92,7 @@ function AdminDashboard() {
 
   
   useEffect(() => {
-    // handleGetPendingKYC()
+    handleGetPendingKYC()
     handleGetData()
   }, [])
   
@@ -156,7 +167,7 @@ function AdminDashboard() {
             icon={<Truck size={15} />}
             onClick={() => setActiveTab('vehicle')}
           >
-            Vehicle Review
+            Pending KYC
           </TabButton>
 
           <TabButton
@@ -165,7 +176,7 @@ function AdminDashboard() {
             count={vehicleReviews?.length ?? 0}
              icon={<Video size={15} />}
           >
-            Pending KYC
+            Vehicle Review
           </TabButton>
 
           <TabButton

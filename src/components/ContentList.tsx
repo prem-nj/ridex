@@ -1,5 +1,4 @@
 "use client";
-import { signOut } from "next-auth/react";
 import React from "react";
 import { motion } from "motion/react";
 import {
@@ -238,9 +237,7 @@ function ContentList({
 
               </div>
               
-              <button onClick={() => signOut({ callbackUrl: "/login" })}>
-                Logout
-              </button>
+        
             </motion.div>
           );
         }
