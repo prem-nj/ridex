@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 const SearchMap=dynamic(() => import("@/components/SearchMap"), { ssr: false })
 import axios from 'axios'
 import Vehicle, {  vehicleType } from '@/models/vehicle.model'
-import VehicleCard from '@/components/VehicleCard'
+import VehicleCard from '@/components/VehicleCar'
 
 
 const VEHICLE_META: any = {
