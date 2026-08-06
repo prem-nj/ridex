@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import Image from 'next/image'
 
 import { AnimatePresence, motion } from "motion/react"
-
+import { getSocket } from '@/lib/socket'
 import Link from 'next/link'
 import { redirect, usePathname, useRouter } from 'next/navigation'
 import AuthModel from './AuthModel'
@@ -12,7 +12,6 @@ import AuthModel from './AuthModel'
 
 import { Bike, Car, ChevronRight, LogOut, Menu, Truck, X } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
-
 import { AppDispatch, RootState } from '@/redux/store'
 import { signOut, useSession } from 'next-auth/react'
 import { setUserData } from '@/redux/userSlice'
@@ -21,6 +20,7 @@ const navitems = ["Home", "Booking", "About us", "Contact"]
 function Navbar() {
   const pathName = usePathname();
 
+    const [pendingCount,setPendingCount]=useState(0)
   const [authOpen, setauthOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
     const router = useRouter()
@@ -38,6 +38,37 @@ function Navbar() {
 
   }
 
+ 
+  const fetchCount=async ()=>{
+      try {
+          const {data}=await axios.get("/api/partner/bookings/pending-requests-count")
+          console.log(data)
+          setPendingCount(data)
+      } catch (error) {
+          console.log(error)
+      }
+  }
+
+  useEffect(()=>{
+     if(userData?.role=="partner"){
+       fetchCount()
+     }
+  }, [userData?.role])
+  
+   useEffect(()=>{
+       const socket=getSocket()
+       console.log(socket)
+       socket.on("new-booking",(data)=>{
+        setPendingCount(prev=>prev+1)
+       })
+       return ()=>{
+          socket.off("new-booking")
+       }
+      },[])
+
+
+
+  
   return (
     <>
 
