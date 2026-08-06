@@ -49,11 +49,38 @@ function Navbar() {
           z-50 rounded-full bg-[#0B0B0B] text-white
           shadow-[0_15px_50px_rgba(0,0,0,0.7)] py-3`}
       >
+        
+        
+        
+        
+        
+        
+
+        
+        
+        
+        
         <div className='max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between'>
 
           <Image src={"/logo.jpg"} alt='logo' width={48} height={48} priority className='rounded-xl' />
           <div className='hidden md:flex items-center gap-10'>
+            <div className='hidden md:flex items-center gap-10'>
 
+                {userData?.role == "partner" ? (
+                    <>
+                        <Link className="relative text-sm font-medium text-gray-300 hover:text-white transition" href={"/"}>Home</Link>
+                        <Link className="relative text-sm font-medium text-gray-300 hover:text-white transition" href={"/partner/pending-requests"}>Pending Requests
+                        <span className="absolute -top-2 -right-5 w-6 h-6 bg-white text-black text-xs rounded-full flex items-center justify-center font-bold">{pendingCount ?? 0}</span>
+                        </Link>
+                        <Link className="relative text-sm font-medium text-gray-300 hover:text-white transition" href={"/partner/bookings"}>Bookings</Link>
+                        <Link className="relative text-sm font-medium text-gray-300 hover:text-white transition" href={"/partner/active-ride"}>Active Ride</Link>
+                    </>
+                ) :
+                   null
+                }
+
+
+            </div>
 
 
             {navitems.map((i, index) => {
