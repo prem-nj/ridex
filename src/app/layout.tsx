@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Provider from "@/lib/Provider";
 import ReduxProvider from "@/redux/ReduxProvider";
+import "leaflet/dist/leaflet.css";
+
 import InitUser from "@/InitUser"
 
 const geistSans = Geist({
