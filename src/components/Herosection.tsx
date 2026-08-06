@@ -3,6 +3,8 @@
 import React from 'react'
 import { motion, scale } from "motion/react"
 import { Bike, Bus, Car, Truck } from 'lucide-react';
+import { useRouter } from 'next/navigation'
+import { useSelector } from 'react-redux'
 
 type onAuthType={
   onAuthRequired:()=>void
@@ -10,6 +12,8 @@ type onAuthType={
 
 
 const Herosection = ({onAuthRequired}:onAuthType) => {
+  const router=useRouter()
+  const {userData}=useSelector((state:RootState)=>state.user)
   
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
@@ -60,7 +64,7 @@ const Herosection = ({onAuthRequired}:onAuthType) => {
             bg-white text-black
             rounded-full font-semibold
             shadow-xl'
-onClick={onAuthRequired}
+onClick={()=>{!userData?onAuthRequired():router.push("/user/book")}}
         >Book Now</motion.button>
       </div>
     </div>
