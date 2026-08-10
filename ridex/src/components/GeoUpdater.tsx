@@ -1,5 +1,5 @@
 'use client'
-import { getSocket } from '@/lib/socket';
+import { getSocket, registerSocketIdentity } from '@/lib/socket';
 import React, { useEffect, useRef } from 'react'
 
 function GeoUpdater({userId}:{userId:string}) {
@@ -11,7 +11,7 @@ function GeoUpdater({userId}:{userId:string}) {
     if(!navigator.geolocation)return;
     
     socketRef.current=getSocket()
-      socketRef.current.emit("identity", userId)
+      registerSocketIdentity(userId)
       
       
   

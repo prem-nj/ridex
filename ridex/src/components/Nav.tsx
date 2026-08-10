@@ -49,12 +49,15 @@ function Nav() {
 
     useEffect(() => {
         const socket = getSocket()
-        console.log(socket)
-        socket.on("new-booking", (data) => {
+
+        const handleNewBooking = () => {
             setPendingCount(prev => prev + 1)
-        })
+        }
+
+        socket.on("new-booking", handleNewBooking)
+
         return () => {
-            socket.off("new-booking")
+            socket.off("new-booking", handleNewBooking)
         }
     }, [])
 

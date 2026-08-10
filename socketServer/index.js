@@ -84,15 +84,14 @@ app.post("/emit", async (req, res) => {
       })
     }
 
-    console.log("Socket ID:", user.socketId)
+    // Delivered to the user's room rather than a stored socket id: the id
+    // goes stale on every reconnect and a user can have several tabs open.
+    const room = String(userId)
+    const sockets = await io.in(room).fetchSockets()
 
-    if (user.socketId) {
-      io.to(user.socketId).emit(event, data)
+    io.to(room).emit(event, data)
 
-      console.log("✅ Event sent successfully")
-    } else {
-      console.log("❌ User has no socket ID")
-    }
+    console.log("✅ Event sent to sockets:", sockets.length)
 
     return res.json({
       success: true,
@@ -126,6 +125,7 @@ io.on("connection", (socket) => {
       console.log("👤 IDENTITY RECEIVED:", userId)
 
       socket.userId = userId
+      socket.join(String(userId))
 
       await User.findByIdAndUpdate(userId, {
         socketId: socket.id,
@@ -237,6 +237,13 @@ io.on("connection", (socket) => {
     try {
 
       if (!socket.userId) {
+        return
+      }
+
+      // Another tab may still be connected for this user.
+      const remaining = await io.in(String(socket.userId)).fetchSockets()
+
+      if (remaining.length > 0) {
         return
       }
 
