@@ -73,12 +73,43 @@ export default function Page() {
     const router = useRouter()
 
     const handleSendPickUpOtp = async () => {
+        if (!booking?._id) {
+            console.log("❌ Booking ID missing")
+            setOtpError("Booking ID missing")
+            return
+        }
+
+        setLoadingOtp(true)
+        setOtpError("")
+
         try {
-            const { data } = await axios.post("/api/partner/booking/otp/pickup/send", { bookingId: booking?._id })
-            console.log(data)
+            console.log("📤 Sending pickup OTP:", booking._id)
+
+            const { data } = await axios.post(
+                "/api/partner/booking/otp/pickup/send",
+                {
+                    bookingId: booking._id,
+                }
+            )
+
+            console.log("✅ PICKUP OTP SENT:", data)
+
             setOtpMode(true)
+            setOtp("")
+            setOtpError("")
         } catch (error: any) {
-            console.log(error.response?.data?.message)
+            console.error(
+                "❌ SEND PICKUP OTP ERROR:",
+                error.response?.data || error
+            )
+
+            setOtpError(
+                error.response?.data?.error ||
+                error.response?.data?.message ||
+                "Failed to send pickup OTP"
+            )
+        } finally {
+            setLoadingOtp(false)
         }
     }
 
@@ -120,18 +151,57 @@ export default function Page() {
     }
   
     const handleVerifyPickUpOtp = async () => {
+        if (!booking?._id) {
+            setOtpError("Booking ID missing")
+            return
+        }
+
+        if (otp.length !== 4) {
+            setOtpError("Please enter 4 digit OTP")
+            return
+        }
+
         setLoadingOtp(true)
+        setOtpError("")
+
         try {
-            const { data } = await axios.post("/api/partner/booking/otp/pickup/verify", { bookingId: booking?._id, otp })
+            console.log("🔐 Verifying pickup OTP:", {
+                bookingId: booking._id,
+                otp,
+            })
+
+            const { data } = await axios.post(
+                "/api/partner/booking/otp/pickup/verify",
+                {
+                    bookingId: booking._id,
+                    otp,
+                }
+            )
+
+            console.log("✅ PICKUP OTP VERIFIED:", data)
+
             setOtpVerified(true)
-            setLoadingOtp(false)
             setOtpMode(false)
+            setOtp("")
             setStatus("started")
-            setBooking(prev => prev ? { ...prev, bookingStatus: "started" } : prev)
+            setBooking(prev =>
+                prev
+                    ? { ...prev, bookingStatus: "started" }
+                    : prev
+            )
         } catch (error: any) {
-            console.log(error)
+            console.error(
+                "❌ VERIFY PICKUP OTP ERROR:",
+                error.response?.data || error
+            )
+
+            setOtpError(
+                error.response?.data?.error ||
+                error.response?.data?.message ||
+                "Verification failed"
+            )
+        } finally {
             setLoadingOtp(false)
-            setOtpError(error.response?.data?.message ?? "Verification failed")
         }
     }
 
@@ -354,9 +424,18 @@ export default function Page() {
                                     initial={{ opacity: 0, y: 6 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -6 }}
-                                    className="w-full bg-zinc-900 hover:bg-zinc-800 active:scale-[0.97] text-white py-4 rounded-2xl font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2"
+                                    disabled={loadingOtp}
+                                    className="w-full bg-zinc-900 hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97] text-white py-4 rounded-2xl font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2"
                                 >
-                                    <MapPin size={15} /> I've Arrived at Pickup <ArrowRight size={15} className="ml-1" />
+                                    {loadingOtp ? (
+                                        <span>Sending OTP...</span>
+                                    ) : (
+                                        <>
+                                            <MapPin size={15} />
+                                            I've Arrived at Pickup
+                                            <ArrowRight size={15} className="ml-1" />
+                                        </>
+                                    )}
                                 </motion.button>
                             )}
 
@@ -376,7 +455,10 @@ export default function Page() {
                                         <div className='flex justify-center'>
                                             <input
                                                 type="text"
-                                                onChange={e => { setOtp(e.target.value.replace(/\D/g, "")); setOtpError(""); }}
+                                                inputMode="numeric"
+                                                maxLength={4}
+                                                value={otp}
+                                                onChange={e => { setOtp(e.target.value.replace(/\D/g, "").slice(0, 4)); setOtpError(""); }}
                                                 placeholder="· · · ·"
                                                 className="w-48 border-2 border-zinc-200 focus:border-zinc-900 rounded-xl px-4 py-3 text-center text-2xl tracking-[0.5em] font-black outline-none transition-colors"
                                             />
@@ -518,9 +600,18 @@ export default function Page() {
                                     initial={{ opacity: 0, y: 6 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -6 }}
-                                    className="w-full bg-zinc-900 hover:bg-zinc-800 active:scale-[0.97] text-white py-4 rounded-2xl font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2"
+                                    disabled={loadingOtp}
+                                    className="w-full bg-zinc-900 hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.97] text-white py-4 rounded-2xl font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2"
                                 >
-                                    <MapPin size={15} /> I've Arrived at Pickup <ArrowRight size={15} className="ml-1" />
+                                    {loadingOtp ? (
+                                        <span>Sending OTP...</span>
+                                    ) : (
+                                        <>
+                                            <MapPin size={15} />
+                                            I've Arrived at Pickup
+                                            <ArrowRight size={15} className="ml-1" />
+                                        </>
+                                    )}
                                 </motion.button>
                             )}
 
@@ -540,7 +631,10 @@ export default function Page() {
                                         <div className='flex justify-center'>
                                             <input
                                                 type="text"
-                                                onChange={e => { setOtp(e.target.value.replace(/\D/g, "")); setOtpError(""); }}
+                                                inputMode="numeric"
+                                                maxLength={4}
+                                                value={otp}
+                                                onChange={e => { setOtp(e.target.value.replace(/\D/g, "").slice(0, 4)); setOtpError(""); }}
                                                 placeholder="· · · ·"
                                                 className="w-48 border-2 border-zinc-200 focus:border-zinc-900 rounded-xl px-4 py-3 text-center text-2xl tracking-[0.5em] font-black outline-none transition-colors"
                                             />
