@@ -5,7 +5,7 @@ import { motion, scale } from "motion/react"
 import { Bike, Bus, Car, Truck } from 'lucide-react';
 import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
-
+import type { RootState } from '@/redux/store'
 type onAuthType={
   onAuthRequired:()=>void
 }
