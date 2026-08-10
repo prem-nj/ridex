@@ -1,0 +1,14 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/partner/onboarding/pricing/route": "app/api/partner/onboarding/pricing/route.js",
+  "/api/user/active-ride/route": "app/api/user/active-ride/route.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/partner/earning/route": "app/api/partner/earning/route.js",
+  "/api/user/me/route": "app/api/user/me/route.js",
+  "/api/partner/booking/pending-requests-count/route": "app/api/partner/booking/pending-requests-count/route.js",
+  "/partner/pending-requests/page": "app/partner/pending-requests/page.js",
+  "/partner/bookings/page": "app/partner/bookings/page.js",
+  "/user/ride/[id]/page": "app/user/ride/[id]/page.js",
+  "/partner/active-ride/page": "app/partner/active-ride/page.js",
+  "/page": "app/page.js"
+}

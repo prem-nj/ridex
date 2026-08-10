@@ -1,0 +1,1 @@
+globalThis.__RSC_MANIFEST=(globalThis.__RSC_MANIFEST||{});globalThis.__RSC_MANIFEST["/api/partner/onboarding/pricing/route"]={"moduleLoading":{"prefix":"/_next/"},"ssrModuleMapping":{},"edgeSSRModuleMapping":{},"clientModules":{},"entryCSSFiles":{"/home/prem/Desktop/RideX/ridex/src/app/api/partner/onboarding/pricing/route":[]},"rscModuleMapping":{},"edgeRscModuleMapping":{}};
