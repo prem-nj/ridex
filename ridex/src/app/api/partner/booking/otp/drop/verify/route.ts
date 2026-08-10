@@ -1,6 +1,6 @@
 import connectDb from "@/lib/db";
 import Booking from "@/models/booking.model";
-import axios from "axios";
+import { emitToUser } from "@/lib/socketServer";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -64,38 +64,12 @@ export async function POST(req: NextRequest) {
     console.log(" User:", booking.user._id.toString());
 
     // Notify user through Socket.IO
-    try {
-      if (!process.env.SOCKET_SERVER_URL) {
-        console.error("❌ SOCKET_SERVER_URL is not defined");
-      } else {
-        await axios.post(
-          `${process.env.SOCKET_SERVER_URL}/emit`,
-          {
-            event: "ride-completed",
-
-            userId: booking.user._id.toString(),
-
-            data: {
-              bookingId: booking._id.toString(),
-              bookingStatus: "completed",
-              paymentStatus: "paid",
-              fare: booking.fare,
-            },
-          },
-          {
-            timeout: 5000,
-          }
-        );
-
-        console.log(" ride-completed event sent to user");
-      }
-    } catch (socketError) {
-      // Do not fail the ride completion if socket notification fails
-      console.error(
-        "❌ Failed to send ride-completed event:",
-        socketError
-      );
-    }
+    await emitToUser("ride-completed", booking.user._id.toString(), {
+      bookingId: booking._id.toString(),
+      bookingStatus: "completed",
+      paymentStatus: "paid",
+      fare: booking.fare,
+    });
 
     return NextResponse.json(
       {
