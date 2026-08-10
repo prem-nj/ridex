@@ -1,11 +1,5 @@
 import mongoose from "mongoose";
 
-const mongodbURL = process.env.MONGO_URI
-
-if (!mongodbURL) {
-     throw new Error("db url not found!")
-}
-
 let cached = global.mongooseconn
 
 if (!cached) {
@@ -19,6 +13,12 @@ const connectDb = async () => {
      }
 
      if (!cached.promise) {
+          const mongodbURL = process.env.MONGO_URI
+
+          if (!mongodbURL) {
+               throw new Error("db url not found!")
+          }
+
           cached.promise = mongoose.connect(mongodbURL).then(c => c.connection)
      }
 

@@ -1,5 +1,5 @@
 import connectDb from "@/lib/db";
-import razorpay from "@/lib/razorpay";
+import getRazorpay from "@/lib/razorpay";
 import Booking from "@/models/booking.model";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,7 +15,7 @@ export async function POST(req:NextRequest) {
             )
         }
 
-      const order = await razorpay.orders.create({
+      const order = await getRazorpay().orders.create({
           
             amount:booking.fare*100,
             currency:"INR",
