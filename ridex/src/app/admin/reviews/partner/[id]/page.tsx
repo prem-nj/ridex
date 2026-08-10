@@ -1,7 +1,7 @@
 'use client'
 import AnimatedCard from '@/components/AnimatedCard'
 import DocPreview from '@/components/DocPreview'
-import { IPartnerBank } from '@/models/partnerBank.model'
+import IPartnerBank from '@/models/partnerBank.model'
 import { IPartnerDocs } from '@/models/partnerDocs.model'
 import { IUser } from '@/models/user.model'
 import { IVehicle } from '@/models/vehicle.model'
