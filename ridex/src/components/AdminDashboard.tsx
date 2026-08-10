@@ -20,8 +20,7 @@ import React, { useEffect, useState } from 'react'
 import Kpi from './Kpi'
 import TabButton from './TabButton'
 import ContentList from './ContentList'
-// import AdminEarning from './AdminEarning'
-
+import AdminEarning from './AdminEarning'
 type Stats = {
   totalApprovedPartners: number
   totalPartners: number
