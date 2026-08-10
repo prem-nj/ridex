@@ -1,3 +1,9 @@
+
+import connectDb from "@/lib/db";
+import { sendMail } from "@/lib/sendMail";
+import Booking from "@/models/booking.model";
+import { NextRequest, NextResponse } from "next/server";
+
 export async function POST(req: NextRequest) {
     try {
         console.log("1. Starting pickup OTP");
