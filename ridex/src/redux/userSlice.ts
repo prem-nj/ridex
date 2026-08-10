@@ -1,9 +1,9 @@
-import { Iuser } from '@/models/user.model'
+import { IUser } from '@/models/user.model'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 interface IuserState {
-  userData:Iuser | null
+  userData:IUser | null
 }
 
 const initialState: IuserState = {
