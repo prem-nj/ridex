@@ -2,6 +2,7 @@ import express from "express"
 import dotenv from "dotenv"
 import mongoose from "mongoose"
 import http from "http"
+import cors from "cors"
 import { Server } from "socket.io"
 import User from "./models/user.model.js"
 
@@ -10,8 +11,22 @@ dotenv.config()
 const PORT = process.env.PORT || 5000
 const MONGODB_URL = process.env.MONGO_URI
 
+// Origins allowed to connect (comma separated), e.g.
+// CLIENT_URL=https://ridex.vercel.app,http://localhost:3000
+const allowedOrigins = (process.env.CLIENT_URL || "http://localhost:3000")
+  .split(",")
+  .map((origin) => origin.trim().replace(/\/+$/, ""))
+  .filter(Boolean)
+
+const corsOptions = {
+  origin: allowedOrigins.includes("*") ? true : allowedOrigins,
+  methods: ["GET", "POST"],
+  credentials: true,
+}
+
 const app = express()
 
+app.use(cors(corsOptions))
 app.use(express.json())
 
 // Test route
@@ -24,11 +39,7 @@ const server = http.createServer(app)
 
 // Socket.IO
 const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
+  cors: corsOptions,
 })
 
 // MongoDB connection
@@ -36,6 +47,15 @@ const connectDb = async () => {
   try {
     await mongoose.connect(MONGODB_URL)
     console.log(" DB connected")
+
+    // Socket ids from a previous process are dead after a restart
+    // (Render redeploys / free instance spin down), so clear them.
+    const { modifiedCount } = await User.updateMany(
+      { $or: [{ isOnline: true }, { socketId: { $ne: null } }] },
+      { $set: { isOnline: false, socketId: null } }
+    )
+
+    console.log(" Stale sockets cleared:", modifiedCount)
   } catch (error) {
     console.error("❌ DB ERROR:", error)
   }
@@ -250,9 +270,8 @@ io.on("connection", (socket) => {
 
 server.listen(PORT, "0.0.0.0", async () => {
 
-  console.log(
-    `🚀 Socket server started on http://localhost:${PORT}`
-  )
+  console.log(`🚀 Socket server listening on port ${PORT}`)
+  console.log(" Allowed origins:", allowedOrigins.join(", "))
 
   await connectDb()
 

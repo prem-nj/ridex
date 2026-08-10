@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import connectDb from "@/lib/db";
 import Booking from "@/models/booking.model";
 import User from "@/models/user.model";
-import axios from "axios";
+import { emitToUser } from "@/lib/socketServer";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -115,16 +115,7 @@ export async function POST(req: NextRequest) {
 
     console.log("BOOKING CREATED:", booking._id);
 
-    if (process.env.NEXT_PUBLIC_SOCKET_SERVER_URL) {
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_SOCKET_SERVER_URL}/emit`,
-        {
-          event: "new-booking",
-          userId: driverId,
-          data: booking,
-        }
-      );
-    }
+    await emitToUser("new-booking", driverId, booking);
 
     return NextResponse.json(booking, {
       status: 200,
