@@ -1,1 +1,0 @@
-globalThis.__RSC_MANIFEST=(globalThis.__RSC_MANIFEST||{});globalThis.__RSC_MANIFEST["/api/booking/[id]/confirm/route"]={"moduleLoading":{"prefix":"/_next/"},"ssrModuleMapping":{},"edgeSSRModuleMapping":{},"clientModules":{},"entryCSSFiles":{"/home/prem/Desktop/RideX/ridex/src/app/api/booking/[id]/confirm/route":[]},"rscModuleMapping":{},"edgeRscModuleMapping":{}};
