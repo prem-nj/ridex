@@ -89,11 +89,11 @@ function page() {
     
         socket.emit("join-ride", id)
     
-        socket.on("driver-location", ({ latitude, longitude }) => {
+        const handleDriverLocation = ({ latitude, longitude }: { latitude: number, longitude: number }) => {
             setDriverPos([latitude, longitude])
-        })
-    
-        socket.on("ride-completed", (data) => {
+        }
+
+        const handleRideCompleted = (data: { bookingId: string }) => {
             console.log(" RIDE COMPLETED:", data)
     
             if (data.bookingId === id) {
@@ -107,11 +107,14 @@ function page() {
                     }
                 })
             }
-        })
+        }
+
+        socket.on("driver-location", handleDriverLocation)
+        socket.on("ride-completed", handleRideCompleted)
     
         return () => {
-            socket.off("driver-location")
-            socket.off("ride-completed")
+            socket.off("driver-location", handleDriverLocation)
+            socket.off("ride-completed", handleRideCompleted)
         }
     }, [id])
 

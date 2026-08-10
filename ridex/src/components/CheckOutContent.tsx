@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { div } from 'motion/react-client';
 import axios from 'axios';
 import Razorpay from 'razorpay';
-import { getSocket } from '@/lib/socket';
+import { getSocket, registerSocketIdentity } from '@/lib/socket';
 const VEHICLE_META: any = {
   bike: { label: "Bike", Icon: Bike },
   auto: { label: "Auto", Icon: Car },
@@ -69,41 +69,36 @@ function CheckOutContent() {
 
   useEffect(() => {
     const socket = getSocket()
-  
-    console.log(" Checkout socket:", socket.id)
-  
-    socket.on("connect", () => {
-      console.log(" Socket connected:", socket.id)
-    })
-  
- 
 
-    
-    socket.on("accept-booking", (data) => {
+    let paymentTimer: ReturnType<typeof setTimeout>
+
+    const handleAcceptBooking = (data: any) => {
       console.log("ACCEPT BOOKING RECEIVED:", data)
-    
+
       setBooking(data)
-    
+
       // Show the Driver Accepted animation first
       setStatus("awaiting_payment")
-      
+
       // Then automatically show payment options
-      setTimeout(() => {
+      paymentTimer = setTimeout(() => {
         setStatus("payment")
       }, 2000)
-    })
+    }
 
-    
-    socket.on("reject-booking", (data) => {
+    const handleRejectBooking = (data: Status) => {
       console.log("❌ REJECT BOOKING RECEIVED:", data)
-  
+
       setStatus(data)
-    })
-  
+    }
+
+    socket.on("accept-booking", handleAcceptBooking)
+    socket.on("reject-booking", handleRejectBooking)
+
     return () => {
-      socket.off("connect")
-      socket.off("accept-booking")
-      socket.off("reject-booking")
+      clearTimeout(paymentTimer)
+      socket.off("accept-booking", handleAcceptBooking)
+      socket.off("reject-booking", handleRejectBooking)
     }
   }, [])
 
@@ -211,12 +206,8 @@ function CheckOutContent() {
         setStatus(bookingStatus)
       }
   
-      const socket = getSocket()
-  
-      socket.emit("identity", data.booking.user)
-  
-      console.log("Identity sent:", data.booking.user)
-  
+      registerSocketIdentity(data.booking.user)
+
     } catch (error) {
       console.log(error)
     }

@@ -246,12 +246,15 @@ export default function Page() {
         if (!booking?._id) return;
         const socket = getSocket()
         socket.emit("join-ride", booking?._id)
-        socket.on("driver-location", ({ latitude, longitude }) => {
+
+        const handleDriverLocation = ({ latitude, longitude }: { latitude: number, longitude: number }) => {
             setDriverPos([latitude, longitude])
-        })
+        }
+
+        socket.on("driver-location", handleDriverLocation)
+
         return () => {
-            socket.off("join-ride")
-            socket.off("driver-location")
+            socket.off("driver-location", handleDriverLocation)
         }
     }, [booking?._id])
 

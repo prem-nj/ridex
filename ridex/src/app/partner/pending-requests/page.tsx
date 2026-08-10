@@ -90,8 +90,9 @@ function page() {
 
     const handleReject=async (id:string)=>{
         try {
-           const {data}=await axios.get(`/api/partner/booking/${id}/reject`) 
-           window.location.reload()
+           await axios.get(`/api/partner/booking/${id}/reject`)
+
+           setBookings((prev)=>prev.filter((booking)=>booking._id!==id))
         } catch (error) {
             console.log(error)
         }
@@ -103,12 +104,17 @@ function page() {
 
     useEffect(()=>{
      const socket=getSocket()
-     console.log(socket)
-     socket.on("new-booking",(data)=>{
-       setBookings((prev)=>[...prev,data])
-     })
+
+     const handleNewBooking=(data:IBooking)=>{
+       setBookings((prev)=>
+         prev.some(b=>b._id===data._id) ? prev : [...prev,data]
+       )
+     }
+
+     socket.on("new-booking",handleNewBooking)
+
      return ()=>{
-        socket.off("new-booking")
+        socket.off("new-booking",handleNewBooking)
      }
     },[])
     return (

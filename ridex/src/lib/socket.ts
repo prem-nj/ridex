@@ -1,6 +1,7 @@
 import { io, Socket } from "socket.io-client"
 
 let socket: Socket | null = null
+let identityUserId: string | null = null
 
 export const getSocket = () => {
   if (!socket) {
@@ -19,6 +20,12 @@ export const getSocket = () => {
 
     socket.on("connect", () => {
       console.log("🟢 SOCKET CONNECTED:", socket?.id)
+
+      // The server maps userId -> socket, and the socket id changes on every
+      // reconnect, so the identity has to be re-sent each time.
+      if (identityUserId) {
+        socket?.emit("identity", identityUserId)
+      }
     })
 
     socket.on("disconnect", () => {
@@ -31,4 +38,16 @@ export const getSocket = () => {
   }
 
   return socket
+}
+
+export const registerSocketIdentity = (userId: string) => {
+  if (!userId || identityUserId === userId) return
+
+  identityUserId = userId
+
+  const activeSocket = getSocket()
+
+  if (activeSocket.connected) {
+    activeSocket.emit("identity", userId)
+  }
 }
