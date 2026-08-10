@@ -34,7 +34,13 @@ export async function GET() {
             bookingStatus: {
                 $in: ["confirmed", "started"]
             }
-        }).populate("user vehicle driver")
+        })
+            .populate("user")
+            .populate("driver")
+            .populate({
+                path: "vehicle",
+                model: Vehicle
+            })
 
         return NextResponse.json(
             booking,
@@ -42,7 +48,10 @@ export async function GET() {
         )
 
     } catch (error) {
-        console.error("GET ACTIVE RIDE FOR PARTNER ERROR:", error)
+        console.error(
+            "GET ACTIVE RIDE FOR PARTNER ERROR:",
+            error
+        )
 
         return NextResponse.json(
             {
